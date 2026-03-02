@@ -36,6 +36,31 @@ export function useCreateMenuItem() {
   });
 }
 
+export function useUpdateMenuItem() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: any) => {
+      const res = await fetch(`/api/menu-items/${data.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update menu item");
+      }
+
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["menu-items"] });
+    },
+  });
+}
+
 export function useToggleItemAvailability() {
   const queryClient = useQueryClient();
   return useMutation({
