@@ -1,0 +1,233 @@
+Build a FULL modern luxury café website from scratch called "CaffiCan" with a premium UI, QR Menu system, and Admin Dashboard.
+
+CRITICAL BRAND RULE:
+The café name MUST be written EXACTLY as:
+"CaffiCan"
+Do NOT misspell it anywhere in the project.
+
+BRAND IDENTITY:
+
+* Café Name: CaffiCan
+* Primary Color: #8a8e62 (Luxury Olive)
+* Secondary Color: #faebd7 (Soft Beige)
+* Style: Premium, elegant, modern luxury café (minimal and classy)
+* Target: Customers scanning QR codes inside the café to view menu
+
+TECH STACK (IMPORTANT):
+
+* Frontend: React (Vite) + Tailwind CSS
+* Backend: Node.js + Express
+* Database: SQLite (lightweight and fast)
+* Image storage ready (Cloudinary compatible)
+* Clean modular folder structure
+* Mobile-first performance optimized
+
+PROJECT STRUCTURE:
+
+* /client (frontend)
+* /server (backend API)
+* /admin (dashboard panel)
+* /public (logo, assets, QR images)
+
+CORE FEATURES OVERVIEW:
+This is a DIGITAL MENU website only.
+Customers will NOT order online.
+They will only scan QR and view the menu, then order from the waiter.
+
+========================
+
+1. LUXURY UI DESIGN (VERY IMPORTANT)
+   ========================
+
+* Premium café aesthetic (NOT basic template)
+* Soft beige background (#faebd7)
+* Olive accents (#8a8e62)
+* Glassmorphism cards with soft shadows
+* Smooth animations and transitions
+* Elegant typography (Playfair Display + Poppins)
+* Rounded corners and luxury spacing
+* High-end modern layout like luxury café brands
+* Beautiful micro-interactions (hover, fade, slide)
+
+========================
+2) NAVBAR (PROFESSIONAL)
+========================
+
+* Left: CaffiCan Logo (text-based elegant logo)
+* Center/Right:
+
+  * Home
+  * Menu
+  * Admin (small lock icon link to /admin)
+* Sticky navbar with blur + smooth scroll effect
+* Elegant hover underline animation
+* Fully responsive hamburger menu for mobile
+
+========================
+3) LOGO SYSTEM (MUST BE INCLUDED)
+=================================
+
+Create a clean luxury text logo:
+"CaffiCan"
+
+* Olive color (#8a8e62)
+* Elegant café font
+  Use the logo in:
+* Navbar
+* Admin Login Page
+* Footer
+* Favicon (browser icon)
+
+========================
+4) HOMEPAGE (LUXURY LANDING)
+============================
+
+Hero Section:
+
+* Big title: CaffiCan
+* Subtitle: "Luxury Café Digital Menu"
+* Elegant gradient background (beige + olive tones)
+* Smooth fade-in animation
+* Premium CTA Button: "View Menu"
+
+Sections:
+
+* About CaffiCan (short elegant text)
+* Featured Hot Drinks (animated cards)
+* Featured Desserts (animated cards)
+* Smooth scroll reveal animations
+* Floating subtle animation elements
+
+========================
+5) QR DIGITAL MENU PAGE (MOST IMPORTANT - MOBILE FIRST)
+=======================================================
+
+Route: /menu
+Supports table parameter:
+Example:
+
+* /menu?table=1
+* /menu?table=VIP
+
+Features:
+
+* Display label: "Viewing Menu - Table X"
+* Extremely mobile-friendly UI
+* Large readable fonts (for café lighting)
+* Sticky category tabs:
+
+  * Hot Drinks
+  * Cold Drinks
+  * Desserts
+* Smooth tab transition animation
+* Search bar for items
+* Beautiful item cards including:
+
+  * Item Image
+  * Item Name
+  * Price (stylish badge)
+  * Description
+  * Availability badge (Available / Sold Out)
+* Card hover lift animation
+* Skeleton loading animation
+* Lazy loading images for performance
+
+IMPORTANT:
+NO CART
+NO CHECKOUT
+NO ONLINE ORDERING
+Display-only menu system.
+
+========================
+6) ADMIN DASHBOARD (SECURE & LUXURY)
+====================================
+
+Route: /admin
+
+Login Credentials:
+Username: can
+Password: can#3011@
+
+Admin UI Design:
+
+* Dark luxury dashboard theme
+* Sidebar with CaffiCan logo
+* Sections:
+
+  * Dashboard Overview
+  * Categories
+  * Sections
+  * Menu Items
+  * QR Tables
+  * Settings
+
+Dashboard Features:
+
+* Add / Edit / Delete Categories (Hot / Cold / Desserts)
+* Create unlimited sections inside categories
+  Example:
+  Hot Drinks → Coffee
+  Cold Drinks → Iced Coffee
+* Add Menu Items with:
+
+  * Name
+  * Price
+  * Description
+  * Image Upload
+  * Category selection
+  * Section selection
+  * Availability toggle (Available / Sold Out)
+* Edit and delete items
+* Live menu auto-update without page refresh
+* Drag & drop item ordering (optional)
+
+========================
+7) QR TABLE SYSTEM (SMART CAFÉ FEATURE)
+=======================================
+
+* Generate QR code for each table inside dashboard
+* Input: Table Name or Number
+* Generate dynamic QR:
+  /menu?table=Table-1
+* Download QR as PNG
+* Table management:
+
+  * Add table
+  * Delete table
+  * View QR preview
+* Optimized for printing on café tables
+
+========================
+8) ANIMATIONS & UX (PREMIUM)
+============================
+
+* Smooth page transitions (fade + slide)
+* Scroll reveal animations
+* Hover glow buttons
+* Card hover scale effect
+* Smooth loading transitions
+* Premium micro-interactions (subtle and elegant)
+* Fast performance optimization
+
+========================
+9) FOOTER (ELEGANT)
+===================
+
+* CaffiCan Logo
+* Text: "Digital Menu Experience"
+* Minimal social icons placeholders
+* Soft luxury styling
+
+========================
+10) DATABASE SCHEMA (SQLITE)
+============================
+
+Tables:
+
+* categories (id, name)
+* sections (id, name, category_id)
+* menu_items (id, name, price, description, image, category_id, section_id, available)
+* tables (id, table_name, qr_code_url)
+
+FINAL GOAL:
+Create a fast, beautiful, luxury café digital menu website for CaffiCan that looks premium, works perfectly on mobile QR scans, includes a secure admin dashboard, a built-in QR generator, correct branding, smooth animations, and a clean professional UI — built بالكامل من الصفر بشكل منظم وقابل للتطوير.
