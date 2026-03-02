@@ -5,6 +5,8 @@ import { useSections } from "@/hooks/use-sections";
 import { useMenuItems, useCreateMenuItem, useDeleteMenuItem, useToggleItemAvailability } from "@/hooks/use-menu-items";
 import { Plus, Trash2, Power, Image as ImageIcon } from "lucide-react";
 
+
+
 export default function MenuItemsManage() {
   const { data: categories } = useCategories();
   const { data: sections } = useSections();
@@ -19,6 +21,29 @@ export default function MenuItemsManage() {
     name: "", price: "", description: "", image: "", categoryId: "", sectionId: ""
   });
 
+  const [uploading, setUploading] = useState(false);
+
+  const uploadToCloudinary = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append(
+      "upload_preset",
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    );
+
+    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+    return data.secure_url;
+  };
   const availableSections = sections?.filter(s => s.categoryId === Number(formData.categoryId)) || [];
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -81,8 +106,60 @@ export default function MenuItemsManage() {
               <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full bg-input/50 border border-border text-foreground rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary outline-none" rows={2} />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-muted-foreground mb-1">Image URL (Optional)</label>
-              <input type="url" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full bg-input/50 border border-border text-foreground rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-primary outline-none" placeholder="https://..." />
+              <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
+                Item Image (Optional)
+              </label>
+
+              <input
+                type="file"
+                accept="image/*"
+                className="w-full bg-input/50 border border-border text-foreground rounded-xl px-4 py-2.5 outline-none"
+                onChange={async (e) => {
+                  if (!e.target.files?.[0]) return;
+
+                  try {
+                    setUploading(true);
+                    const url = await uploadToCloudinary(e.target.files[0]);
+
+                    setFormData({
+                      ...formData,
+                      image: url,
+                    });
+                  } catch (err) {
+                    console.error("Upload failed:", err);
+                    alert("Failed to upload image");
+                  } finally {
+                    setUploading(false);
+                  }
+                }}
+              />
+
+              {uploading && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Uploading image...
+                </p>
+              )}
+
+              {formData.image && (
+                <div className="mt-3">
+                  <img
+                    src={formData.image}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-xl border border-border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({ ...formData, image: "" })
+                    }
+                    className="mt-2 text-sm text-destructive hover:underline"
+                  >
+                    Remove Image
+                  </button>
+                </div>
+              )}
+            </div>
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-4 border-t border-border">

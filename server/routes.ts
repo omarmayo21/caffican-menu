@@ -6,6 +6,7 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 
+import cloudinary from "./lib/cloudinary";
 const SessionStore = MemoryStore(session);
 const ADMIN_USERNAME = 'can';
 const ADMIN_PASSWORD = 'can#3011@';
@@ -179,8 +180,36 @@ export async function registerRoutes(
   });
 
   app.delete(api.menuItems.delete.path, requireAuth, async (req, res) => {
-    await storage.deleteMenuItem(Number(req.params.id));
-    res.status(204).end();
+    try {
+      const id = Number(req.params.id);
+
+      // 1️⃣ هات الصنف من الداتابيز
+      const items = await storage.getMenuItems();
+      const item = items.find((i) => i.id === id);
+
+      // 2️⃣ لو فيه صورة على Cloudinary → احذفها
+      if (item?.image && item.image.includes("cloudinary")) {
+        try {
+          const parts = item.image.split("/");
+          const fileName = parts[parts.length - 1]; // example: abc123.jpg
+          const publicId = fileName.split(".")[0]; // abc123
+
+          // لو بتستخدم فولدر caffican/menu في preset
+          await cloudinary.uploader.destroy(`caffican/menu/${publicId}`);
+          console.log("Cloudinary image deleted:", publicId);
+        } catch (cloudErr) {
+          console.error("Cloudinary delete error:", cloudErr);
+        }
+      }
+
+      // 3️⃣ احذف الصنف من الداتابيز
+      await storage.deleteMenuItem(id);
+
+      res.status(204).end();
+    } catch (error) {
+      console.error("Delete menu item error:", error);
+      res.status(500).json({ message: "Failed to delete item" });
+    }
   });
 
   // Tables
