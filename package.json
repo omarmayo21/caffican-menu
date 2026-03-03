@@ -4,7 +4,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "build": "vite build && tsc && tsx script/build.ts",
+    "build": "vite build && tsc",
     "start": "node dist/index.cjs",
     "db:push": "drizzle-kit push"
   },
