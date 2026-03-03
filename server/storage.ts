@@ -12,7 +12,7 @@ import {
   type InsertMenuItem,
   type Table,
   type InsertTable,
-} from "@shared/schema";
+} from "../shared/schema.js";
 import { eq } from "drizzle-orm";
 
 export interface IStorage {

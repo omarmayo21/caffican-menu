@@ -3,7 +3,7 @@ import type { Server } from "http";
 import session from "express-session";
 import MemoryStore from "memorystore";
 import { storage } from "./storage.js";
-import { api } from "@shared/routes";
+import { api } from "../shared/routes.js";
 import { z } from "zod";
 
 import cloudinary from "./lib/cloudinary.js";
