@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertCategorySchema, insertSectionSchema, insertMenuItemSchema, insertTableSchema, categories, sections, menuItems, tables } from './schema';
+import { insertCategorySchema, insertSectionSchema, insertMenuItemSchema, insertTableSchema, categories, sections, menuItems, tables } from './schema.js';
 
 export const errorSchemas = {
   validation: z.object({ message: z.string(), field: z.string().optional() }),
