@@ -21,7 +21,7 @@ export function useCreateMenuItem() {
       const payload = { 
         ...data, 
         categoryId: Number(data.categoryId),
-        sectionId: data.sectionId ? Number(data.sectionId) : undefined
+        sectionId: data.sectionId ? Number(data.sectionId) : null
       };
       
       const res = await fetch(api.menuItems.create.path, {
