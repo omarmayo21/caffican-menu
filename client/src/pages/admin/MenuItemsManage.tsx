@@ -25,12 +25,12 @@ export default function MenuItemsManage() {
   
   const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState({
-    name: "", price: "", description: "", image: "", categoryId: "", sectionId: ""
+    name: "", price: "", description: "", image: "", categoryId: "", sectionId: "", imagePublicId: "",
   });
   const [editingItem, setEditingItem] = useState<any>(null);
   const [uploading, setUploading] = useState(false);
 
-  const uploadToCloudinary = async (file: File): Promise<string> => {
+  const uploadToCloudinary = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append(
@@ -49,7 +49,11 @@ export default function MenuItemsManage() {
     );
 
     const data = await res.json();
-    return data.secure_url;
+
+    return {
+      url: data.secure_url,
+      publicId: data.public_id,
+    };
   };
   const availableSections = sections?.filter(s => s.categoryId === Number(formData.categoryId)) || [];
 
@@ -85,6 +89,7 @@ export default function MenuItemsManage() {
       image: "",
       categoryId: "",
       sectionId: "",
+      imagePublicId: "",
     });
 
     setIsCreating(false);
@@ -110,6 +115,7 @@ export default function MenuItemsManage() {
                 image: "",
                 categoryId: "",
                 sectionId: "",
+                imagePublicId: "",
               });
             }
             setIsCreating(true);
@@ -164,12 +170,13 @@ export default function MenuItemsManage() {
 
                   try {
                     setUploading(true);
-                    const url = await uploadToCloudinary(e.target.files[0]);
+                   const result = await uploadToCloudinary(e.target.files[0]);
 
-                    setFormData((prev) => ({
-                      ...prev,
-                      image: url,
-                    }));
+                  setFormData((prev) => ({
+                    ...prev,
+                    image: result.url,
+                    imagePublicId: result.publicId,
+                  }));
                   } catch (err) {
                     console.error("Upload failed:", err);
                   } finally {
@@ -265,6 +272,8 @@ export default function MenuItemsManage() {
                       price: item.price,
                       description: item.description || "",
                       image: item.image || "",
+                      imagePublicId: item.imagePublicId || "",  // 👈 ضيف دي
+
                       categoryId: String(item.categoryId),
                       sectionId: item.sectionId ? String(item.sectionId) : "",
                     });

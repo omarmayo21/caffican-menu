@@ -19,6 +19,7 @@ export const menuItems = pgTable("menu_items", {
   name: text("name").notNull(),
   price: text("price").notNull(),
   description: text("description"),
+  imagePublicId: text("image_public_id"),
   image: text("image"),
   categoryId: integer("category_id").notNull(),
   sectionId: integer("section_id"),
@@ -57,7 +58,12 @@ export const menuItemRelations = relations(menuItems, ({ one }) => ({
 
 export const insertCategorySchema = createInsertSchema(categories).omit({ id: true });
 export const insertSectionSchema = createInsertSchema(sections).omit({ id: true });
-export const insertMenuItemSchema = createInsertSchema(menuItems).omit({ id: true });
+export const insertMenuItemSchema = createInsertSchema(menuItems)
+  .omit({ id: true })
+  .extend({
+    image: z.string().url().optional().nullable(),
+    imagePublicId: z.string().optional().nullable(),
+  });
 export const insertTableSchema = createInsertSchema(tables).omit({ id: true });
 
 export type Category = typeof categories.$inferSelect;

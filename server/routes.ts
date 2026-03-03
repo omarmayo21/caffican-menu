@@ -165,17 +165,60 @@ export async function registerRoutes(
 
   app.put(api.menuItems.update.path, requireAuth, async (req, res) => {
     try {
+      const id = Number(req.params.id);
+
       const bodySchema = api.menuItems.update.input.extend({
         categoryId: z.coerce.number().optional(),
         sectionId: z.coerce.number().optional().nullable(),
+        image: z.string().optional().nullable(),
+        imagePublicId: z.string().optional().nullable(),
       });
+
       const input = bodySchema.parse(req.body);
-      const item = await storage.updateMenuItem(Number(req.params.id), input);
-      res.status(200).json(item);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        res.status(400).json({ message: err.errors[0].message });
+
+      // 1️⃣ هات الصنف القديم
+      const items = await storage.getMenuItems();
+      const existingItem = items.find((i) => i.id === id);
+
+      if (!existingItem) {
+        return res.status(404).json({ message: "Item not found" });
       }
+
+      // 2️⃣ لو الصورة اتغيرت
+      if (
+        existingItem.imagePublicId &&
+        input.imagePublicId &&
+        existingItem.imagePublicId !== input.imagePublicId
+      ) {
+        try {
+          await cloudinary.uploader.destroy(existingItem.imagePublicId);
+          console.log("Old image deleted:", existingItem.imagePublicId);
+        } catch (err) {
+          console.error("Cloudinary delete error:", err);
+        }
+      }
+
+      // 3️⃣ لو الصورة اتمسحت خالص
+      if (
+        existingItem.imagePublicId &&
+        input.imagePublicId === null
+      ) {
+        try {
+          await cloudinary.uploader.destroy(existingItem.imagePublicId);
+          console.log("Image removed completely:", existingItem.imagePublicId);
+        } catch (err) {
+          console.error("Cloudinary delete error:", err);
+        }
+      }
+
+      // 4️⃣ اعمل التحديث في الداتابيز
+      const updatedItem = await storage.updateMenuItem(id, input);
+
+      res.status(200).json(updatedItem);
+
+    } catch (err) {
+      console.error("Update menu item error:", err);
+      res.status(500).json({ message: "Failed to update menu item" });
     }
   });
 
@@ -188,20 +231,14 @@ export async function registerRoutes(
       const item = items.find((i) => i.id === id);
 
       // 2️⃣ لو فيه صورة على Cloudinary → احذفها
-      if (item?.image && item.image.includes("cloudinary")) {
-        try {
-          const parts = item.image.split("/");
-          const fileName = parts[parts.length - 1]; // example: abc123.jpg
-          const publicId = fileName.split(".")[0]; // abc123
-
-          // لو بتستخدم فولدر caffican/menu في preset
-          await cloudinary.uploader.destroy(`caffican/menu/${publicId}`);
-          console.log("Cloudinary image deleted:", publicId);
-        } catch (cloudErr) {
-          console.error("Cloudinary delete error:", cloudErr);
+        if (item?.imagePublicId) {
+          try {
+            await cloudinary.uploader.destroy(item.imagePublicId);
+            console.log("Cloudinary image deleted:", item.imagePublicId);
+          } catch (cloudErr) {
+            console.error("Cloudinary delete error:", cloudErr);
+          }
         }
-      }
-
       // 3️⃣ احذف الصنف من الداتابيز
       await storage.deleteMenuItem(id);
 
