@@ -4,9 +4,8 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "build": "vite build && tsc",
-    "start": "node dist/index.cjs",
-    "db:push": "drizzle-kit push"
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "start": "node dist/server/index.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
