@@ -2,11 +2,11 @@ import type { Express } from "express";
 import type { Server } from "http";
 import session from "express-session";
 import MemoryStore from "memorystore";
-import { storage } from "./storage";
+import { storage } from "./storage.js";
 import { api } from "@shared/routes";
 import { z } from "zod";
 
-import cloudinary from "./lib/cloudinary";
+import cloudinary from "./lib/cloudinary.js";
 const SessionStore = MemoryStore(session);
 const ADMIN_USERNAME = 'can';
 const ADMIN_PASSWORD = 'can#3011@';
