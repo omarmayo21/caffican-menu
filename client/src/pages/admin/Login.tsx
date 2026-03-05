@@ -4,8 +4,8 @@ import { useLocation } from "wouter";
 import { Coffee, Lock, User } from "lucide-react";
 
 export default function AdminLogin() {
-  const [username, setUsername] = useState("can");
-  const [password, setPassword] = useState("can#3011@");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login, isLoggingIn } = useAuth();
   const [, setLocation] = useLocation();

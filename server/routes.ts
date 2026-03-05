@@ -174,8 +174,8 @@ export async function registerRoutes(
         imagePublicId: z.string().optional().nullable(),
       });
 
-      const input = bodySchema.parse(req.body);
-
+      const { id: _ignored, ...rest } = req.body;
+      const input = bodySchema.parse(rest);
       // 1️⃣ هات الصنف القديم
       const items = await storage.getMenuItems();
       const existingItem = items.find((i) => i.id === id);
